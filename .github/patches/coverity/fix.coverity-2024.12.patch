@@ -1,17 +1,3 @@
-# Copyright contributors to the oneDAL project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 diff -Naur config.orig/templates/clang/llvm/clang_llvm_switches.dat config/templates/clang/llvm/clang_llvm_switches.dat
 --- config.orig/templates/clang/llvm/clang_llvm_switches.dat	2024-12-19 11:37:23.246903941 -0800
 +++ config/templates/clang/llvm/clang_llvm_switches.dat	2024-12-19 11:40:32.106018314 -0800
@@ -26,7 +12,7 @@ diff -Naur config.orig/templates/clang/llvm/clang_llvm_switches.dat config/templ
 diff -Naur config.orig/templates/clang/llvm/compiler-compat-clang-common.h config/templates/clang/llvm/compiler-compat-clang-common.h
 --- config.orig/templates/clang/llvm/compiler-compat-clang-common.h	2024-12-19 11:37:23.247903958 -0800
 +++ config/templates/clang/llvm/compiler-compat-clang-common.h	2024-12-19 11:37:23.264904238 -0800
-@@ -20581,3 +20581,12 @@
+@@ -20590,3 +20590,12 @@
  /* Added in android r27 (based on clang 18.0), renamed by clang 18.1 */
  /* } */
  #endif
@@ -42,7 +28,7 @@ diff -Naur config.orig/templates/clang/llvm/compiler-compat-clang-common.h confi
 diff -Naur config.orig/templates/intel_oneapi_linux/compiler-compat-intel-oneapi-linux-common.h config/templates/intel_oneapi_linux/compiler-compat-intel-oneapi-linux-common.h
 --- config.orig/templates/intel_oneapi_linux/compiler-compat-intel-oneapi-linux-common.h	2024-12-19 11:37:23.253904057 -0800
 +++ config/templates/intel_oneapi_linux/compiler-compat-intel-oneapi-linux-common.h	2024-12-19 11:38:31.283025888 -0800
-@@ -79,3 +79,10 @@
+@@ -79,3 +79,8 @@
  int __builtin_isnanf (float);
  int __builtin_isnanl (long double);
  #endif // __clang_major__ == 14
@@ -51,8 +37,6 @@ diff -Naur config.orig/templates/intel_oneapi_linux/compiler-compat-intel-oneapi
 +// Support for the Intel _Quad type enabled by '-Xclang --extended_float_types'
 +#define _Quad __float128
 +#endif
-+
-+typedef long long __int64;
 diff -Naur config.orig/templates/intel_oneapi_linux/intel_oneapi_linux_compilers.cpp config/templates/intel_oneapi_linux/intel_oneapi_linux_compilers.cpp
 --- config.orig/templates/intel_oneapi_linux/intel_oneapi_linux_compilers.cpp	2024-12-19 11:37:23.253904057 -0800
 +++ config/templates/intel_oneapi_linux/intel_oneapi_linux_compilers.cpp	2024-12-19 11:40:32.107018331 -0800
@@ -287,6 +271,15 @@ diff -Naur config.orig/templates/intel_oneapi_windows/compiler-compat-intel-onea
 +// Support for the Intel _Quad type enabled by '-Xclang --extended_float_types'
 +#define _Quad __float128
 +#endif
+diff -Naur config.orig/templates/intel_oneapi_windows/intel_oneapi_windows_preprocessor_switches.dat config/templates/intel_oneapi_windows/intel_oneapi_windows_preprocessor_switches.dat
+--- config.orig/templates/intel_oneapi_windows/intel_oneapi_windows_preprocessor_switches.dat	2024-12-19 11:37:23.253904057 -0800
++++ config/templates/intel_oneapi_windows/intel_oneapi_windows_preprocessor_switches.dat	2024-12-19 11:38:31.283025888 -0800
+@@ -6,3 +6,5 @@
+ // Black Duck Software and that customer.
+ 
+ import $CONFIG_TEMPLATES_BASE_DIR$/clang/llvm/clang_llvm_preprocessor_switches.dat
++
++{"extended_float_types", oa_dash_dash|oa_required|oa_map, "DCOVERITY_EXTENDED_FLOAT_TYPES", oa_dash|oa_discard_prefix},
 diff -Naur config.orig/templates/intel_oneapi_windows/intel_oneapi_windows_switches.dat config/templates/intel_oneapi_windows/intel_oneapi_windows_switches.dat
 --- config.orig/templates/intel_oneapi_windows/intel_oneapi_windows_switches.dat	2024-12-19 11:37:23.253904057 -0800
 +++ config/templates/intel_oneapi_windows/intel_oneapi_windows_switches.dat	2024-12-19 11:38:15.614767511 -0800
@@ -321,7 +314,7 @@ diff -Naur config.orig/templates/intel_oneapi_windows/intel_oneapi_windows_switc
 diff -Naur config.orig/templates/intel_oneapi_windows/nosycl/intel_oneapi_windows_nosycl_config.xml config/templates/intel_oneapi_windows/nosycl/intel_oneapi_windows_nosycl_config.xml
 --- config.orig/templates/intel_oneapi_windows/nosycl/intel_oneapi_windows_nosycl_config.xml	2024-12-19 11:37:23.253904057 -0800
 +++ config/templates/intel_oneapi_windows/nosycl/intel_oneapi_windows_nosycl_config.xml	2024-12-19 11:38:24.156908375 -0800
-@@ -168,6 +170,14 @@
+@@ -170,6 +170,14 @@
                <replace>@(.*)</replace>
                <with>--coverity_resp_file=$1</with>
              </replace_arg_regex>
@@ -336,7 +329,7 @@ diff -Naur config.orig/templates/intel_oneapi_windows/nosycl/intel_oneapi_window
              <response_file_strip_poundsign_comments>true</response_file_strip_poundsign_comments>
            </options>
          </expand>
-@@ -180,6 +190,7 @@
+@@ -182,6 +190,7 @@
  
          <prepend_arg>-fms-extensions</prepend_arg>
          <prepend_arg>-fpack-struct=16</prepend_arg>
@@ -355,3 +348,37 @@ diff -Naur config.orig/templates/intel_oneapi_windows/sycl/compiler-compat-intel
  typedef void* __ocl_event_t;
  typedef void* __ocl_sampler_t;
  class __ocl_image1d_ro_t;
+diff -Naur config.orig/templates/intel_oneapi_windows/sycl/intel_oneapi_windows_sycl_config.xml config/templates/intel_oneapi_windows/sycl/intel_oneapi_windows_sycl_config.xml
+--- config.orig/templates/intel_oneapi_windows/sycl/intel_oneapi_windows_sycl_config.xml	2024-12-19 11:37:23.253904057 -0800
++++ config/templates/intel_oneapi_windows/sycl/intel_oneapi_windows_sycl_config.xml	2024-12-19 11:38:24.156908375 -0800
+@@ -206,6 +206,7 @@
+         </pre_trans>
+         <prepend_arg>-fno-cxx-exceptions</prepend_arg>
+         <pre_prepend_arg>--std=c++17</pre_prepend_arg>
++        <pre_prepend_arg>-fno-cxx-exceptions</pre_prepend_arg>
+         <prepend_arg>-Wno-c++11-narrowing</prepend_arg>
+         <ident_switch>-EP</ident_switch>
+         <ident_input>
+@@ -256,6 +257,14 @@
+               <replace>@(.*)</replace>
+               <with>--coverity_resp_file=$1</with>
+             </replace_arg_regex>
++            <replace_arg_regex>
++              <replace>/Qstd=(.*)</replace>
++              <with>/Qstd:$1</with>
++            </replace_arg_regex>
++            <replace_arg_regex>
++              <replace>-Qstd=(.*)</replace>
++              <with>-Qstd:$1</with>
++            </replace_arg_regex>
+             <response_file_strip_poundsign_comments>true</response_file_strip_poundsign_comments>
+           </options>
+         </expand>
+@@ -268,6 +277,7 @@
+ 
+         <prepend_arg>-fms-extensions</prepend_arg>
+         <prepend_arg>-fpack-struct=16</prepend_arg>
++        <prepend_arg>-mavx512fp16</prepend_arg>
+         <!-- Workaround for __builtin_bit_cast(_To, __from),
+              when /Qstd:gnu++98 or /Qstd:gnu++03 is in command line,
+              and _To has no default constructor. -->
