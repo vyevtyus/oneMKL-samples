@@ -79,7 +79,6 @@ jobs:
           source /opt/intel/mkl/mkl/latest/env/vars.sh
           export PATH="${PWD}/cov-linux64-tool/bin:${PATH}"
           cov-configure --template --compiler icpx --comptype intel_icpx:linux
-          ls -la
 
           shopt -s nullglob
           GLOBIGNORE="american_options/:batched_linear_solver/:cov-int/:*git*/"
@@ -98,7 +97,6 @@ jobs:
 
       - name: Submit Coverity results for analysis
         run: |
-          cd build
           curl -X POST \
             -d version="${GITHUB_SHA}" \
             -d description="" \
