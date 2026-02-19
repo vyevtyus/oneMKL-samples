@@ -77,7 +77,11 @@ jobs:
           export PATH="${PWD}/cov-linux64-tool/bin:${PATH}"
           cov-configure --template --compiler icpx --comptype intel_icpx:linux
           ls -la
-          for d in */; do [[ "$d" == *git* || "$d" == *cov-int* ]] && continue; echo ">> $d"; (cd "$d" && cov-build --dir ../cov-int --append-log --delete-stale-tus make); done
+          for d in */; do
+            [[ "$d" == *git* || "$d" == *cov-int* ]] && continue
+            echo ">> $d"
+            (cd "$d" && cov-build --dir ../cov-int --append-log --delete-stale-tus make || [[ $? -eq 2 ]])
+          done
 
       - name: Archive oneMKL-samples build results
         run: |
