@@ -82,7 +82,7 @@ jobs:
           ls -la
 
           shopt -s nullglob
-          GLOBIGNORE="american_options:batched_linear_solver:cov-int:*git*"
+          GLOBIGNORE="american_options/:batched_linear_solver/:cov-int/:*git*/"
 
           for d in */; do
             echo ">> $d"
@@ -95,12 +95,6 @@ jobs:
           size=$(du -m cov-int.tgz | cut -f1)
           echo "Artifact size: $size MB"
           echo "size=$size" >> $GITHUB_OUTPUT
-
-      - name: Cache build archive
-        uses: actions/cache@v4
-        with:
-          path: cov-int.tgz
-          key: oneMKL-samples-cov-dir-${{github.sha}}
 
       # - name: Submit Coverity results for analysis
       #   run: |
