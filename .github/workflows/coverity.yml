@@ -55,8 +55,8 @@ jobs:
           mkdir cov-linux64-tool
           tar -xzf cov-linux64-tool.tar.gz --strip 1 -C cov-linux64-tool
           cd cov-linux64-tool/config
-          git apply --check ${GITHUB_WORKSPACE}/.github/workflows/fix.coverity-2024.12.patch
-          if patch -p1 < ${GITHUB_WORKSPACE}/.github/workflows/fix.coverity-2024.12.patch; then
+          git apply --check ${GITHUB_WORKSPACE}/.github/patches/coverity/fix.coverity-2024.12.patch
+          if patch -p1 < ${GITHUB_WORKSPACE}/.github/patches/coverity/fix.coverity-2024.12.patch; then
             echo "Coverity Build Tool configs successfully patched"
           else
             echo "Coverity Build Tool configs patching failed, check patch relevance to current Coverity Build Tool version"
